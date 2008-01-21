@@ -539,6 +539,9 @@ static void FoldGmodLuaDoc(unsigned int startPos, int length, int initStyle, Wor
 			}
 		}
 
+		if (!isspacechar(ch)) {
+			visibleChars++;
+		}
 		if (atEOL) {
 			int lev = levelPrev;
 			if (visibleChars == 0 && foldCompact) {
@@ -554,12 +557,9 @@ static void FoldGmodLuaDoc(unsigned int startPos, int length, int initStyle, Wor
 			levelPrev = levelCurrent;
 			visibleChars = 0;
 		}
-		if (!isspacechar(ch)) {
-			visibleChars++;
-		}
 	}
-	// Fill in the real level of the next line, keeping the current flags as they will be filled in later
 
+	// Fill in the real level of the next line, keeping the current flags as they will be filled in later
 	int flagsNext = styler.LevelAt(lineCurrent) & ~SC_FOLDLEVELNUMBERMASK;
 	styler.SetLevel(lineCurrent, levelCurrent | flagsNext);
 }
