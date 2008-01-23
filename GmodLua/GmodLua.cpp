@@ -486,15 +486,15 @@ static void FoldGmodLuaDoc(unsigned int startPos, int length, int initStyle, Wor
 	int lineCurrent = styler.GetLine(startPos);
 	int levelPrev = styler.LevelAt(lineCurrent) & SC_FOLDLEVELNUMBERMASK;
 	int levelCurrent = levelPrev;
-	char chNext = styler.SafeGetCharAt(startPos, '\n');
+	char chNext = styler[startPos];
 	bool foldCompact = styler.GetPropertyInt("fold.compact", 1) != 0;
 	int styleNext = styler.StyleAt(startPos);
 	int style = initStyle;
 	char s[10];
 
-	for (unsigned int i = startPos; i <= lengthDoc; i++) {
+	for (unsigned int i = startPos; i < lengthDoc; i++) {
 		char ch = chNext;
-		chNext = styler.SafeGetCharAt(i + 1, '\n');
+		chNext = styler.SafeGetCharAt(i + 1);
 		int stylePrev = style;
 		style = styleNext;
 		styleNext = styler.StyleAt(i + 1);
@@ -515,9 +515,9 @@ static void FoldGmodLuaDoc(unsigned int startPos, int length, int initStyle, Wor
 				}
 			}
 		} else if (style == GMOD_STYLE_OPERATOR) {
-			if (ch == '{' || ch == '(') {
+			if (ch == '{'){
 				levelCurrent++;
-			} else if (ch == '}' || ch == ')') {
+			} else if (ch == '}'){
 				levelCurrent--;
 			}
 		} else if ((style == GMOD_STYLE_LITERALSTRING || style == GMOD_STYLE_LUA_COMMENT || style == GMOD_STYLE_CPP_COMMENT) &&
@@ -542,12 +542,12 @@ static void FoldGmodLuaDoc(unsigned int startPos, int length, int initStyle, Wor
 		if (!isspacechar(ch)) {
 			visibleChars++;
 		}
-		if (atEOL) {
+		if (atEOL || (i == lengthDoc-1)) {
 			int lev = levelPrev;
 			if (visibleChars == 0 && foldCompact) {
 				lev |= SC_FOLDLEVELWHITEFLAG;
 			}
-			if ((levelCurrent > levelPrev) && (visibleChars > 0)) {
+			if (levelCurrent > levelPrev) {
 				lev |= SC_FOLDLEVELHEADERFLAG;
 			}
 			if (lev != styler.LevelAt(lineCurrent)) {
@@ -558,8 +558,8 @@ static void FoldGmodLuaDoc(unsigned int startPos, int length, int initStyle, Wor
 			visibleChars = 0;
 		}
 	}
-
-	// Fill in the real level of the next line, keeping the current flags as they will be filled in later
-	int flagsNext = styler.LevelAt(lineCurrent) & ~SC_FOLDLEVELNUMBERMASK;
-	styler.SetLevel(lineCurrent, levelCurrent | flagsNext);
+	char lastChar = styler.SafeGetCharAt(lengthDoc-1);
+	if ((unsigned)styler.Length() == lengthDoc && (lastChar == '\n' || lastChar == '\r')) {
+		styler.SetLevel(lineCurrent, levelCurrent);
+	}
 }
