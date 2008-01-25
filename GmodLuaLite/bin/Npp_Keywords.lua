@@ -64,7 +64,7 @@ end
 
 local Ignores = { "mathx", "stringx", "_G", "_R", "_E", "GAMEMODE", "g_SBoxObjects", "tablex", "color_black",
 				  "color_white", "utilx", "_LOADLIB", "_LOADED", "color_transparent", "filex", "func", "DOF_Ents", 
-				  "Morph", "_ENT", "PANEL" }
+				  "Morph", "_ENT" }
 
 // Retrieve Everything Global
 for k, v in pairs(_G) do
@@ -180,7 +180,7 @@ for _,kind in pairs({"base_anim", "base_point", "base_brush", "base_vehicle"}) d
 		end
 	end
 end
---[[
+--[[  // Code to determine TOOL functions and variables
 local tbl1 = {}
 local tbl2 = {}
 for _, t in pairs(weapons.Get('gmod_tool').Tool) do
@@ -221,21 +221,6 @@ for kind, tbl in pairs(TOOL) do
 		end
 		if !table.HasValue(output[funct[kind]], "TOOL:"..v) and (kind == "funct") then
 			table.insert(output[funct[kind]], "TOOL:"..v)
-		end
-	end
-end
-if CLIENT then
-	for k, v in pairs(PANEL) do
-		if type(k) == "string" then
-			if type(v) == "function" then
-				table.insert(output.scriptedFunctions, "self."..k)
-				table.insert(output.scriptedFunctions, "self:"..k)
-				table.insert(output.scriptedFunctions, "PANEL."..k)
-				table.insert(output.scriptedFunctions, "PANEL:"..k)
-			elseif type(v) == "string" then
-				table.insert(output.scriptedFunctions, "self."..k)
-				table.insert(output.scriptedFunctions, "PANEL."..k)
-			end
 		end
 	end
 end

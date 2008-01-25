@@ -105,7 +105,7 @@ extern "C" __declspec(dllexport) LRESULT messageProc(UINT Message, WPARAM wParam
 }
 
 void aboutDlg(){
-	::MessageBox(nppData._nppHandle, "Garry's Mod 10 Lua\nSyntax Highlighting 1.0\n\nAuthor: Garthex\ngarthex@gmail.com", "<-About->", MB_OK);
+	::MessageBox(nppData._nppHandle, "Garry's Mod 10 Lua Syntax Highlighter 1.1\nhttp://code.google.com/p/npp-gmod-lua/\n\n                      Author: Garthex", "<-About->", MB_OK);
 }
 
 static void ColouriseGmodLuaDoc( unsigned int startPos, int length,
