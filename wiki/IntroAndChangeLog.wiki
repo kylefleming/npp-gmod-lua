@@ -1,0 +1,35 @@
+#summary An introduction to and change log for the Gmod Lua plugin
+#labels Featured,Phase-Introduction,Phase-Change-Log
+
+= Introduction =
+
+With Gmod now using Lua 5.1.2, I decided to update the Notepad++ syntax highlighter I wrote about a year ago. This time I coordinated with Don HO, the admin of Notepad++, to release an update to N++ which I wrote that supports external lexers. This allows me to release this as a plugin instead of recompiling Scintilla each time. Now you can get updates for Notepad++ and still use the same plugin in the future.
+
+
+= Change Log =
+== Release 1.1: January 25, 2008 ==
+ * Fixed folding so it doesn't fold past the last character except when folding the last line of the document and it's blank.
+ * Removed folding parenthesis.
+ * Fixed keyword generator and updated keyword list to be consistent with the 1-15-08 Gmod patch.
+
+== Release 1.0: January 12, 2008 ==
+ * Support for [==[ ]==] style comments and quotes as specified by Lua 5.1
+ * Improved code to determine numbers.
+ * The ability to set C++ and Lua comments as different styles.
+ * An XML that is fully customizable to allow you to add up to 9 keyword categories for syntax highlighting.
+ * Default keyword groups for instruction words, global constants, global functions, scripted variables, scripted functions, libraries, library calls, object functions, and red flags.
+ * Fixed problems with the last line of a document.
+ * More intelligent word highlighter:
+  * Spaces between words and period such as file . Write
+  * First checks if word1.word2 is a word
+  * If it isn't, then it checks for word1 and word2 separately.
+  * Allows a colon ( : ) in a word in addition to a period.
+
+
+== Available from the Previous Implementation ==
+ * Folding!
+ * A line with either --{, --}, //{ or //} will also fold.
+ * Support for both C++ and Lua comments and strings.
+ * Customizable styles within the preferences dialog.
+ * Escape Character '\' So you can escape the end of a line properly and escape quotes properly
+ * Single-line strings when unclosed at the end of a line don't try and parse the rest of the document as a string.
