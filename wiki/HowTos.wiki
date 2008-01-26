@@ -12,6 +12,15 @@
  * You are able to change the look and feel of each different style category here as well as define custom keywords and user extensions (.lua is default)
  * The "Global Styles" in the language box also allows for other types of style configurations.
 
+= How to Fix Notepad++ to Select the Correct Language =
+ * Unfortunately there is a bug in Notepad++ 4.7.3+ where it will select the Lua language by default when opening a .lua file.
+ * Install version 4.7.3 of [http://notepad-plus.sourceforge.net/uk/site.htm Notepad++].
+ * Unzip NppOpenFileFix and place Notepad++.exe where it belongs in the Notepad++ folder. Be sure to back up the old version.
+ * Go into Settings > Preferences... > Language Menu.
+ * Locate "Lua" in the left column and move it over to the right column. This disables the default Lua so that it doesn't show up in the menu.
+ * Assuming you have the Gmod Lua plugin installed, next time you open a .lua file it'll use "Gmod 10 Lua" as long as that's not also disabled.
+
+
 = How to Edit Keywords Manually =
  * Open GmodLua.xml which is in Notepad++/plugins/Config
  * For each "Keywords" line, you can put as many keywords as you want.
