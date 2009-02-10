@@ -1,8 +1,0 @@
-LIBRARY	"GmodLua"
-
-EXPORTS
-	Lex = Lex
-	GetLexerCount = GetLexerCount
-	GetLexerName = GetLexerName
-	GetLexerStatusText = GetLexerStatusText
-	Fold = Fold

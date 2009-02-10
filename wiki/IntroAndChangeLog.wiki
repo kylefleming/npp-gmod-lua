@@ -7,6 +7,12 @@ With Gmod now using Lua 5.1.2, I decided to update the Notepad++ syntax highligh
 
 
 = Change Log =
+== Release 1.2: February 08, 2009 ==
+ * Fixed the issue created when N++ switched to Unicode from ANSI.
+ * Converted the plugin to the system created by Thell Fowler. (thell@almostautomated.com)
+ * Updated GmodLua.xml to reflect the most recent lua function set.
+ * Removed the unoptimized and lite versions.
+
 == Release 1.1: January 25, 2008 ==
  * Fixed keyword generator and updated keyword list to be consistent with the 1-15-08 Gmod patch.
  * Fixed folding so it doesn't fold past the last character except when folding the last line of the document and the last line is blank.

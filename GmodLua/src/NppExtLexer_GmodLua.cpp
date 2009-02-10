@@ -1,8 +1,11 @@
-// GmodLua.cpp
+// NppExtLexer_GmodLua.cpp
 // This file is part of GmodLua.
 // Written for Notepad++
 
-// Copyright (C)2008 Kyle Fleming ( garthex@gmail.com )
+// Copyright (C)2008-2009 Kyle Fleming ( garthex@gmail.com )
+
+// Code borrowed from the Notepad++ External Lexers Plugin.
+// Copyright 2008 - 2009 Thell Fowler (thell@almostautomated.com)
 
 // Code borrowed from npp.4.6.src\scintilla\src\LexCaml.cxx
 // Copyright 2005 by Robert Roessler <robertr@rftp.com>
@@ -25,162 +28,24 @@
 // You should have received a copy of the GNU General Public License
 // along with GmodLua.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "GmodLua.h"
 
-const char PLUGIN_NAME[] = "&Gmod Lua";
-const char LEXER_NAME[] = "Gmod 10 Lua";
-const char LEXER_DESC[] = "Garry's Mod 10 Lua source file";
-const int nbFunc = 1;
+///////////////////////////////////////////////////////////////////////////////////////////////
+//  Include Directives
 
-HANDLE g_hModule = NULL;
-NppData nppData;
-FuncItem funcItem[nbFunc];
+#include "NppExtLexer_GmodLua.h"	//  Provides the lexer specific definitions.
 
 
-BOOL APIENTRY DllMain(HANDLE hModule, DWORD reasonForCall, LPVOID lpReserved)
-{
-	g_hModule = hModule;
+///////////////////////////////////////////////////////////////////////////////////////////////
+//  <--- Namespace Aliases --->
+namespace sID = NppExtLexer_GmodLua::Styles;		//  All of the style state codes.
+namespace lex = NppExtLexer_GmodLua;				//  This lexer's namespace.
 
-	switch (reasonForCall)
-	{
-		case DLL_PROCESS_ATTACH:
-		{
-			/* Set function pointers */
-			funcItem[0]._pFunc = aboutDlg;
-		    	
-			/* Fill menu names */
-			strncpy(funcItem[0]._itemName, "&About...", sizeof("&About..."));
 
-			/* Set shortcuts */
-			funcItem[0]._pShKey = NULL;
-			
-			break;
-		}	
-		case DLL_PROCESS_DETACH:
-			break;
+namespace NppExtLexer_GmodLua {
 
-		case DLL_THREAD_ATTACH:
-			break;
-			
-		case DLL_THREAD_DETACH:
-			break;
-	}
+///////////////////////////////////////////////////////////////////////////////////////////////
+//  Main Lexer Functions
 
-	return TRUE;
-}
-
-extern "C" __declspec(dllexport) void setInfo(NppData notpadPlusData)
-{
-	nppData = notpadPlusData;
-}
-
-extern "C" __declspec(dllexport) const char * getName()
-{
-	return PLUGIN_NAME;
-}
-
-extern "C" __declspec(dllexport) FuncItem * getFuncsArray(int *nbF)
-{
-	*nbF = nbFunc;
-	return funcItem;
-}
-
-extern "C" __declspec(dllexport) void beNotified(SCNotification *notifyCode)
-{
-	switch (notifyCode->nmhdr.code) 
-	{
-	case NPPN_READY:
-		break;
-	}
-}
-
-// Here you can process the Npp Messages 
-// I will make the messages accessible little by little, according to the need of plugin development.
-// Please let me know if you need to access to some messages :
-// http://sourceforge.net/forum/forum.php?forum_id=482781
-//
-extern "C" __declspec(dllexport) LRESULT messageProc(UINT Message, WPARAM wParam, LPARAM lParam)
-{
-	return TRUE;
-}
-
-void aboutDlg(){
-	::MessageBox(nppData._nppHandle, "Garry's Mod 10 Lua Syntax Highlighter 1.1\nhttp://code.google.com/p/npp-gmod-lua/\n\n                      Author: Garthex", "<-About->", MB_OK);
-}
-
-static void ColouriseGmodLuaDoc( unsigned int startPos, int length,
-	int initStyle, WordList *keywordlists[], Accessor &styler);
-
-static void FoldGmodLuaDoc(unsigned int startPos, int length,
-	int initStyle, WordList *keywordlists[], Accessor &styler);
-
-static void InternalLexOrFold(int lexOrFold, unsigned int startPos, int length,
-	int initStyle, char *words[], WindowID window, char *props);
-
-void EXT_LEXER_DECL Fold(unsigned int lexer, unsigned int startPos, int length,
-	int initStyle, char *words[], WindowID window, char *props)
-{
-	if(lexer == 0)
-		InternalLexOrFold(1, startPos, length, initStyle, words, window, props);
-}
-
-void EXT_LEXER_DECL Lex(unsigned int lexer, unsigned int startPos, int length,
-	int initStyle, char *words[], WindowID window, char *props)
-{
-	if(lexer == 0)
-		InternalLexOrFold(0, startPos, length, initStyle, words, window, props);
-}
-
-static void InternalLexOrFold(int foldOrLex, unsigned int startPos, int length,
-	int initStyle, char *words[], WindowID window, char *props){
-
-	// create and initialize a WindowAccessor (including contained PropSet)
-	PropSet ps;
-	ps.SetMultiple(props);
-	WindowAccessor wa(window, ps);
-	// create and initialize WordList(s)
-	int nWL = 0;
-	for (; words[nWL]; nWL++) ;	// count # of WordList PTRs needed
-	WordList** wl = new WordList* [nWL + 1];// alloc WordList PTRs
-	int i = 0;
-	for (; i < nWL; i++) {
-		wl[i] = new WordList();	// (works or THROWS bad_alloc EXCEPTION)
-		wl[i]->Set(words[i]);
-	}
-	wl[i] = 0;
-	// call our "internal" folder/lexer (... then do Flush!)
-	if (foldOrLex)
-		FoldGmodLuaDoc(startPos, length, initStyle, wl, wa);
-	else
-		ColouriseGmodLuaDoc(startPos, length, initStyle, wl, wa);
-	wa.Flush();
-	// clean up before leaving
-	for (i = nWL - 1; i >= 0; i--)
-		delete wl[i];
-	delete [] wl;
-}
-
-int EXT_LEXER_DECL GetLexerCount(){
-	return 1;
-}
-void EXT_LEXER_DECL GetLexerName(unsigned int Index, char *name, int buflength){
-   if (buflength > 0) {
-      buflength--;
-      int n = (int)strlen(LEXER_NAME);
-      if (n > buflength)
-         n = buflength;
-      memcpy(name, LEXER_NAME, n), name[n] = '\0';
-   }
-}
-void EXT_LEXER_DECL GetLexerStatusText(unsigned int Index, char *name, int buflength){
-   if (buflength > 0) {
-      buflength--;
-      int n = (int)strlen(LEXER_DESC);
-      if (n > buflength)
-         n = buflength;
-      memcpy(name, LEXER_DESC, n), name[n] = '\0';
-   }
-}
 
 // Extended to accept accented characters
 static inline bool IsAWordChar(int ch) {
@@ -198,7 +63,7 @@ static inline bool IsLuaOperator(int ch) {
 		ch == '{' || ch == '}' || ch == '~' ||
 		/*ch == '[' ||*/ ch == ']' || ch == ';' ||
 		ch == '<' || ch == '>' || ch == ',' ||
-		ch == '.' || ch == '^' || ch == '%' || ch == ':' ||
+		/*ch == '.' ||*/ ch == '^' || ch == '%' || //ch == ':' ||
 		ch == '#' || ch == '&' || ch == '|' ||
 		ch == '!') {
 		return true;
@@ -218,8 +83,10 @@ static int LongDelimCheck(StyleContext &sc) {
 	return 0;
 }
 
-static void ColouriseGmodLuaDoc(unsigned int startPos, int length,
-	int initStyle, WordList *keywordlists[], Accessor &styler) {
+
+//  <---  Colourise --->
+void Colourise_Doc(unsigned int startPos, int length, int initStyle, WordList *keywordlists[], Accessor &styler)
+{
 
 	WordList &keywords0 = *keywordlists[0];
 	WordList &keywords1 = *keywordlists[1];
@@ -233,13 +100,13 @@ static void ColouriseGmodLuaDoc(unsigned int startPos, int length,
 
 	int currentLine = styler.GetLine(startPos);
 	int sepCount = 0;
-	if (initStyle == GMOD_STYLE_LITERALSTRING || initStyle == GMOD_STYLE_LUA_COMMENT) {
+	if (initStyle == sID::LITERALSTRING || initStyle == sID::LUA_COMMENT) {
 		sepCount = styler.GetLineState(currentLine - 1) & 0xFF;
 	}
 
 	// Do not leak onto next line
-	if (initStyle == GMOD_STYLE_STRINGEOL || initStyle == GMOD_STYLE_LUA_COMMENTLINE || initStyle == GMOD_STYLE_CPP_COMMENTLINE) {
-		initStyle = GMOD_STYLE_DEFAULT;
+	if (initStyle == sID::STRINGEOL || initStyle == sID::LUA_COMMENTLINE || initStyle == sID::CPP_COMMENTLINE) {
+		initStyle = sID::DEFAULT;
 	}
 
 	StyleContext sc(startPos, length, initStyle, styler);
@@ -248,8 +115,8 @@ static void ColouriseGmodLuaDoc(unsigned int startPos, int length,
 			// Update the line state, so it can be seen by next line
 			currentLine = styler.GetLine(sc.currentPos);
 			switch (sc.state) {
-			case GMOD_STYLE_LITERALSTRING:
-			case GMOD_STYLE_LUA_COMMENT:
+			case sID::LITERALSTRING:
+			case sID::LUA_COMMENT:
 				// Inside a literal string or block comment, we set the line state
 				styler.SetLineState(currentLine, sepCount);
 				break;
@@ -261,7 +128,7 @@ static void ColouriseGmodLuaDoc(unsigned int startPos, int length,
 		}
 
 		// Handle string line continuation
-		if ((sc.state == GMOD_STYLE_STRING || sc.state == GMOD_STYLE_CHARACTER) &&
+		if ((sc.state == sID::STRING || sc.state == sID::CHARACTER) &&
 		        sc.ch == '\\') {
 			if (sc.chNext == '\n' || sc.chNext == '\r') {
 				sc.Forward();
@@ -273,9 +140,9 @@ static void ColouriseGmodLuaDoc(unsigned int startPos, int length,
 		}
 
 		// Determine if the current state should terminate.
-		if (sc.state == GMOD_STYLE_OPERATOR || sc.state == GMOD_STYLE_NUMBER) {
-			sc.SetState(GMOD_STYLE_DEFAULT);
-		} else if (sc.state == GMOD_STYLE_IDENTIFIER) {
+		if (sc.state == sID::OPERATOR || sc.state == sID::NUMBER) {
+			sc.SetState(sID::DEFAULT);
+		} else if (sc.state == sID::IDENTIFIER) {
 			if (!IsAWordChar(sc.ch) || (sc.currentPos+1 == startPos + length)) {
 				if (IsAWordChar(sc.ch)) {
 					sc.Forward(); // Checks words at the end of the document.
@@ -283,73 +150,65 @@ static void ColouriseGmodLuaDoc(unsigned int startPos, int length,
 				char s[100];
 				sc.GetCurrent(s, sizeof(s));
 				if (keywords0.InList(s)) {
-					sc.ChangeState(GMOD_STYLE_WORD0);
+					sc.ChangeState(sID::WORD0);
 				} else if (keywords1.InList(s)) {
-					sc.ChangeState(GMOD_STYLE_WORD1);
+					sc.ChangeState(sID::WORD1);
 				} else if (keywords2.InList(s)) {
-					sc.ChangeState(GMOD_STYLE_WORD2);
-				} else if (keywords3.InList(s)) {
-					sc.ChangeState(GMOD_STYLE_WORD3);
-				} else if (keywords4.InList(s)) {
-					sc.ChangeState(GMOD_STYLE_WORD4);
+					sc.ChangeState(sID::WORD2);
 				} else if (keywords5.InList(s)) {
-					sc.ChangeState(GMOD_STYLE_WORD5);
-				} else if (keywords6.InList(s)) {
-					sc.ChangeState(GMOD_STYLE_WORD6);
-				} else if (keywords7.InList(s)) {
-					sc.ChangeState(GMOD_STYLE_WORD7);
+					sc.ChangeState(sID::WORD5);
 				} else if (keywords8.InList(s)) {
-					sc.ChangeState(GMOD_STYLE_WORD8);
+					sc.ChangeState(sID::WORD8);
 				}
-				sc.SetState(GMOD_STYLE_DEFAULT);
+				sc.SetState(sID::DEFAULT);
 			}
-		} else if (sc.state == GMOD_STYLE_LUA_COMMENTLINE || sc.state == GMOD_STYLE_CPP_COMMENTLINE) {
+		} else if (sc.state == sID::LUA_COMMENTLINE || sc.state == sID::CPP_COMMENTLINE) {
 			if (sc.atLineEnd) {
-				sc.ForwardSetState(GMOD_STYLE_DEFAULT);
+				sc.ForwardSetState(sID::DEFAULT);
 			}
-		} else if (sc.state == GMOD_STYLE_STRING) {
+		} else if (sc.state == sID::STRING) {
 			if (sc.ch == '\\') {
 				if (sc.chNext == '\"' || sc.chNext == '\\') {
 					sc.Forward();
 				}
 			} else if (sc.ch == '\"') {
-				sc.ForwardSetState(GMOD_STYLE_DEFAULT);
+				sc.ForwardSetState(sID::DEFAULT);
 			} else if (sc.atLineEnd) {
-				sc.ChangeState(GMOD_STYLE_STRINGEOL);
-				sc.ForwardSetState(GMOD_STYLE_DEFAULT);
+				sc.ChangeState(sID::STRINGEOL);
+				sc.ForwardSetState(sID::DEFAULT);
 			}
-		} else if (sc.state == GMOD_STYLE_CHARACTER) {
+		} else if (sc.state == sID::CHARACTER) {
 			if (sc.ch == '\\') {
 				if (sc.chNext == '\'' || sc.chNext == '\\') {
 					sc.Forward();
 				}
 			} else if (sc.ch == '\'') {
-				sc.ForwardSetState(GMOD_STYLE_DEFAULT);
+				sc.ForwardSetState(sID::DEFAULT);
 			} else if (sc.atLineEnd) {
-				sc.ChangeState(GMOD_STYLE_STRINGEOL);
-				sc.ForwardSetState(GMOD_STYLE_DEFAULT);
+				sc.ChangeState(sID::STRINGEOL);
+				sc.ForwardSetState(sID::DEFAULT);
 			}
-		} else if (sc.state == GMOD_STYLE_LITERALSTRING || sc.state == GMOD_STYLE_LUA_COMMENT) {
+		} else if (sc.state == sID::LITERALSTRING || sc.state == sID::LUA_COMMENT) {
 			if (sc.ch == ']') {
 				int sep = LongDelimCheck(sc);
 				if (sep == sepCount) {
 					sc.Forward(sep);
-					sc.ForwardSetState(GMOD_STYLE_DEFAULT);
+					sc.ForwardSetState(sID::DEFAULT);
 				}
 			}
-		} else if (sc.state == GMOD_STYLE_CPP_COMMENT) {
+		} else if (sc.state == sID::CPP_COMMENT) {
 			if (sc.Match('*', '/')) {
 				sc.Forward();
-				sc.ForwardSetState(GMOD_STYLE_DEFAULT);
+				sc.ForwardSetState(sID::DEFAULT);
 			}
 		} else {
-			sc.SetState(GMOD_STYLE_DEFAULT);
+			sc.SetState(sID::DEFAULT);
 		}
 
 		// Determine if a new state should be entered.
-		if (sc.state == GMOD_STYLE_DEFAULT) {
+		if (sc.state == sID::DEFAULT) {
 			if (IsADigit(sc.ch) || (sc.ch == '.' && IsADigit(sc.chNext))) {
-				sc.SetState(GMOD_STYLE_NUMBER);
+				sc.SetState(sID::NUMBER);
 				if (sc.ch == '0' && (sc.chNext == 'x' || sc.chNext == 'X')) {
 					int j = 1;
 					while (IsADigit(sc.GetRelative(j+1), 16)) {
@@ -381,8 +240,33 @@ static void ColouriseGmodLuaDoc(unsigned int startPos, int length,
 					}
 					sc.Forward(j-1);
 				}
+			} else if (sc.ch == ':' || sc.ch == '.') {
+				sc.SetState(sID::OPERATOR);
+				if (IsAWordChar(sc.chNext) || isspace(sc.chNext)) {
+					int j = 1;
+					int ch = sc.chNext;
+					while((sc.currentPos + j < startPos + length) && isspace(ch)) {
+						ch = sc.GetRelative(++j);
+					}
+					if (IsAWordChar(ch)) {
+						int i = 0;
+						char s[101];
+						while (i < 100 && IsAWordChar(ch)) {
+							s[i++] = ch;
+							ch = sc.GetRelative(++j);
+						}
+						s[i++] = '\0';
+						if (keywords7.InList(s)) {
+							sc.Forward(j-i+1);
+							sc.SetState(sID::WORD7);
+						}
+						if (sc.state != sID::OPERATOR) {
+							sc.Forward(i-2);
+						}
+					}
+				}
 			} else if (IsAWordChar(sc.ch)) {
-				sc.SetState(GMOD_STYLE_IDENTIFIER);
+				sc.SetState(sID::IDENTIFIER);
 				int j = 0;
 				int i = 0;
 				char s[101];
@@ -406,24 +290,14 @@ static void ColouriseGmodLuaDoc(unsigned int startPos, int length,
 								ch = sc.GetRelative(++j);
 							}
 							s[i++] = '\0';
-							if (keywords1.InList(s)) {
-								sc.ChangeState(GMOD_STYLE_WORD1);
-							} else if (keywords2.InList(s)) {
-								sc.ChangeState(GMOD_STYLE_WORD2);
-							} else if (keywords3.InList(s)) {
-								sc.ChangeState(GMOD_STYLE_WORD3);
+							if (keywords3.InList(s)) {
+								sc.ChangeState(sID::WORD3);
 							} else if (keywords4.InList(s)) {
-								sc.ChangeState(GMOD_STYLE_WORD4);
-							} else if (keywords5.InList(s)) {
-								sc.ChangeState(GMOD_STYLE_WORD5);
+								sc.ChangeState(sID::WORD4);
 							} else if (keywords6.InList(s)) {
-								sc.ChangeState(GMOD_STYLE_WORD6);
-							} else if (keywords7.InList(s)) {
-								sc.ChangeState(GMOD_STYLE_WORD7);
-							} else if (keywords8.InList(s)) {
-								sc.ChangeState(GMOD_STYLE_WORD8);
+								sc.ChangeState(sID::WORD6);
 							}
-							if (sc.state != GMOD_STYLE_IDENTIFIER) {
+							if (sc.state != sID::IDENTIFIER) {
 								sc.Forward(j-1);
 							}
 						}
@@ -435,45 +309,46 @@ static void ColouriseGmodLuaDoc(unsigned int startPos, int length,
 					}
 				}
 			} else if (sc.ch == '\"') {
-				sc.SetState(GMOD_STYLE_STRING);
+				sc.SetState(sID::STRING);
 			} else if (sc.ch == '\'') {
-				sc.SetState(GMOD_STYLE_CHARACTER);
+				sc.SetState(sID::CHARACTER);
 			} else if (sc.ch == '[') {
 				sepCount = LongDelimCheck(sc);
 				if (sepCount == 0) {
-					sc.SetState(GMOD_STYLE_OPERATOR);
+					sc.SetState(sID::OPERATOR);
 				} else {
-					sc.SetState(GMOD_STYLE_LITERALSTRING);
+					sc.SetState(sID::LITERALSTRING);
 					sc.Forward(sepCount);
 				}
 			} else if (sc.Match('-', '-')) {
-				sc.SetState(GMOD_STYLE_LUA_COMMENTLINE);
+				sc.SetState(sID::LUA_COMMENTLINE);
 				if (sc.Match("--[")) {
 					sc.Forward(2);
 					sepCount = LongDelimCheck(sc);
 					if (sepCount > 0) {
-						sc.ChangeState(GMOD_STYLE_LUA_COMMENT);
+						sc.ChangeState(sID::LUA_COMMENT);
 						sc.Forward(sepCount);
 					}
 				} else {
 					sc.Forward();
 				}
 			} else if (sc.Match('/', '/')) {
-				sc.SetState(GMOD_STYLE_CPP_COMMENTLINE);
+				sc.SetState(sID::CPP_COMMENTLINE);
 				sc.Forward();
 			} else if (sc.Match('/', '*')) {
-				sc.SetState(GMOD_STYLE_CPP_COMMENT);
+				sc.SetState(sID::CPP_COMMENT);
 				sc.Forward();
 			} else if (IsLuaOperator(sc.ch)) {
-				sc.SetState(GMOD_STYLE_OPERATOR);
+				sc.SetState(sID::OPERATOR);
 			}
 		}
 	}
 	sc.Complete();
 }
 
-static void FoldGmodLuaDoc(unsigned int startPos, int length, int initStyle, WordList *[],
-                       Accessor &styler) {
+//  <--- Fold --->
+void Fold_Doc(unsigned int startPos, int length, int initStyle, WordList *[], Accessor &styler)
+{
 	unsigned int lengthDoc = startPos + length;
 	int visibleChars = 0;
 	int lineCurrent = styler.GetLine(startPos);
@@ -492,7 +367,7 @@ static void FoldGmodLuaDoc(unsigned int startPos, int length, int initStyle, Wor
 		style = styleNext;
 		styleNext = styler.StyleAt(i + 1);
 		bool atEOL = (ch == '\r' && chNext != '\n') || (ch == '\n');
-		if (style == GMOD_STYLE_WORD0 && stylePrev != GMOD_STYLE_WORD0) {
+		if (style == sID::WORD0 && stylePrev != sID::WORD0) {
 			if (ch == 'i' || ch == 'd' || ch == 'f' || ch == 'e' || ch == 'r' || ch == 'u') {
 				unsigned int j;
 				for (j = 0; j < 8 && iswordchar(styler.SafeGetCharAt(i + j)); j++) {
@@ -507,21 +382,21 @@ static void FoldGmodLuaDoc(unsigned int startPos, int length, int initStyle, Wor
 					levelCurrent--;
 				}
 			}
-		} else if (style == GMOD_STYLE_OPERATOR) {
+		} else if (style == sID::OPERATOR) {
 			if (ch == '{'){
 				levelCurrent++;
 			} else if (ch == '}'){
 				levelCurrent--;
 			}
-		} else if ((style == GMOD_STYLE_LITERALSTRING || style == GMOD_STYLE_LUA_COMMENT || style == GMOD_STYLE_CPP_COMMENT) &&
-				!(stylePrev == GMOD_STYLE_LITERALSTRING || stylePrev == GMOD_STYLE_LUA_COMMENT || stylePrev == GMOD_STYLE_CPP_COMMENT) &&
+		} else if ((style == sID::LITERALSTRING || style == sID::LUA_COMMENT || style == sID::CPP_COMMENT) &&
+				!(stylePrev == sID::LITERALSTRING || stylePrev == sID::LUA_COMMENT || stylePrev == sID::CPP_COMMENT) &&
 				(ch == '[' || ch == '/' || ch == '-')) {
 			levelCurrent++;
-		} else if ((style == GMOD_STYLE_LITERALSTRING || style == GMOD_STYLE_LUA_COMMENT || style == GMOD_STYLE_CPP_COMMENT) &&
-				!(styleNext == GMOD_STYLE_LITERALSTRING || styleNext == GMOD_STYLE_LUA_COMMENT || styleNext == GMOD_STYLE_CPP_COMMENT) &&
+		} else if ((style == sID::LITERALSTRING || style == sID::LUA_COMMENT || style == sID::CPP_COMMENT) &&
+				!(styleNext == sID::LITERALSTRING || styleNext == sID::LUA_COMMENT || styleNext == sID::CPP_COMMENT) &&
 				(ch == ']' || ch == '/')) {
 			levelCurrent--;
-		} else if (style == GMOD_STYLE_CPP_COMMENTLINE || style == GMOD_STYLE_LUA_COMMENTLINE) {
+		} else if (style == sID::CPP_COMMENTLINE || style == sID::LUA_COMMENTLINE) {
 			if ((ch == '/' && chNext == '/') || (ch == '-' && chNext == '-')) {
 				char chNext2 = styler.SafeGetCharAt(i + 2);
 				if (chNext2 == '{') {
@@ -556,3 +431,92 @@ static void FoldGmodLuaDoc(unsigned int startPos, int length, int initStyle, Wor
 		styler.SetLevel(lineCurrent, levelCurrent);
 	}
 }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+//  Entry Point Functions.
+
+//  Scintilla lexer entry point.
+void LexOrFold(bool foldOrLex, unsigned int startPos, int length, int initStyle,
+                  char *words[], WindowID window, char *props)
+{
+
+	// Create and initialize the WindowAccessor (including contained PropSet)
+	PropSet ps;
+	ps.SetMultiple(props);
+	WindowAccessor wa(window, ps);
+
+	//  Create and initialize WordList(s).
+	//  If you have an extremely large word file, or lots of styling rules you may want to speed
+	//  up processing by storing the wordlists instead of reprocessing them on each call.
+	int nWL = 0;
+	for (; words[nWL]; nWL++) ;	// count # of WordList PTRs needed
+	WordList** wl = new WordList* [nWL + 1];// alloc WordList PTRs
+	int i = 0;
+	for (; i < nWL; i++) {
+		wl[i] = new WordList();	// (works or THROWS bad_alloc EXCEPTION)
+		wl[i]->Set(words[i]);
+	}
+	wl[i] = 0;
+
+
+	// Set the currView handle to update at least once per lexer call.
+	pIface::hCurrViewNeedsUpdate();
+
+
+	//  Call the internal folding and styling functions.
+	// foldOrLex is false for lex and true for fold
+	if (foldOrLex) {
+
+		// This is a nice helpful routine to back up a line to fix broken folds.
+		int lineCurrent = wa.GetLine(startPos);
+		if (lineCurrent > 0) {
+			lineCurrent--;
+			int newStartPos = wa.LineStart(lineCurrent);
+			length += startPos - newStartPos;
+			startPos = newStartPos;
+			initStyle = 0;
+			if (startPos > 0) {
+				initStyle = wa.StyleAt(startPos - 1);
+			}
+		}
+
+		Fold_Doc(startPos, length, initStyle, wl, wa);
+
+	}
+	else {
+
+		//  You may want to put a routine here to backtrack past leaking styles, typically
+		//  multiline styles, or just put such logic in the Colour_Doc function itself.  Just
+		//  be sure to do it prior to creating your Style Context.
+
+		Colourise_Doc(startPos, length, initStyle, wl, wa);
+
+	}
+
+	//  The flush function is what actually finalizes settings the styles you just coloured.
+	wa.Flush();
+
+	// Clean up the wordlists before leaving.
+	for (i = nWL - 1; i >= 0; i--)
+		delete wl[i];
+	delete [] wl;
+
+}
+
+
+
+//  Notepad++ dialog entry point.
+void menuDlg()
+{
+
+	::MessageBox(pIface::hNpp(),
+		TEXT("Garry's Mod 10 Lua Syntax Highlighter 1.2\r\n")
+		TEXT("http://code.google.com/p/npp-gmod-lua/\r\n\r\n")
+		TEXT("                   Author: Kyle Fleming\n                          (aka Garthex)"),
+		TEXT("<-About->"),
+		MB_OK);
+
+}
+
+}  //  End:  namespace NppExtLexer_GmodLua.
