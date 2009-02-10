@@ -7,7 +7,7 @@ With Gmod now using Lua 5.1.2, I decided to update the Notepad++ syntax highligh
 
 
 = Change Log =
-== Release 1.2: February 08, 2009 ==
+== Release 1.2: February 10, 2009 ==
  * Fixed the issue created when N++ switched to Unicode from ANSI.
  * Converted the plugin to the system created by Thell Fowler. (thell@almostautomated.com)
  * Updated GmodLua.xml to reflect the most recent lua function set.
