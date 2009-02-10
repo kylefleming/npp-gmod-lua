@@ -23,23 +23,22 @@
  * The number must correspond to a "keywordClass" in a "WordsStyle" tag.
  * In the "WordStyle" you can set the names to anything you'd like, but the styleID needs to be 20 + the value of the keywordClass.
 
- * The optimized version has the following characteristics:
+ * The plugin is optimized and has the following characteristics:
   * It checks group 7 after a colon (:) or a period.
   * It checks groups 0, 1, 2, 5, and 8 when it's a single word. (A word includes underscores)
   * It checks groups 3, 4, and 6 when it's a double word (with : or . and possibly whitespace)
 
 
 = How to Edit Keywords Automatically =
- * Move Npp_Keywords.lua from the GmodLua zip file into garrysmod/lua and once in game run the following command.
+ * Move Npp_Keywords.lua from the GmodLua zip file into garrysmod/lua and once in game issue the following command.
   * `lua_openscript Npp_Keywords.lua; lua_openscript_cl Npp_Keywords.lua`
  * Copy and paste the contents of garrysmod/data/gmod_lua.txt into Notepad++/plugins/Config/GmodLua.xml, between the <Language></Language> tag. (Don't overwrite the comments, of course.)
  * Be aware that any global functions or variables declared by other mods will be added to the keyword list.
 
-= How to Compile from Source =
+= How to Compile from Source Using Visual Studios =
  * Compile the latest version of Notepad++ with Visual Studios [http://notepad-plus.wiki.sourceforge.net/Build+Notepad+plus+plus+and+NppInsertPlugin+with+VC+studio+2005+or+2008+Express using this tutorial].
  * Download a Subversion (SVN) program. I prefer [http://tortoisesvn.net/downloads TortoiseSVN] but there are [http://subversion.tigris.org/links.html#clients other good ones available].
- * Checkout the module you want by issuing the checkout command on [http://npp-gmod-lua.googlecode.com/svn/<replace_with_module_name>/].
- * Module names: GmodLua, GmodLuaLite, GmodLuaUnopt
+ * Checkout (aka download) the GmodLua module by issuing the checkout command on [http://npp-gmod-lua.googlecode.com/svn/GmodLua].
  * Move the resulting local directory into the npp.<version>.src directory so that the GmodLua folder is sitting alongside the PowerEditor and scintilla folders.
- * Add the .vcproj file to the Visual Studios solution used to compile Notepad++ and then recompile.
+ * Load up the Visual Studios solution file (GmodLua/vcbuild/GmodLuaPlugin.sln) and then compile.
  * Look in the GmodLua source's bin folder and take the dll and the Config folder and drop it in Notepad++'s plugins folder.
