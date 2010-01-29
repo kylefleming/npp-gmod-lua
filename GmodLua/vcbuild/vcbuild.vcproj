@@ -140,7 +140,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=".\..\..\scintilla\vcbuild\Release\PropSet .\..\..\scintilla\vcbuild\Release\WindowAccessor .\..\..\scintilla\vcbuild\Release\PlatWin .\..\..\scintilla\vcbuild\Release\XPM .\..\..\scintilla\vcbuild\Release\UniConversion .\..\..\scintilla\vcbuild\Release\StyleContext"
+				AdditionalDependencies=".\..\..\scintilla\vcbuild\Release\PropSet .\..\..\scintilla\vcbuild\Release\WindowAccessor .\..\..\scintilla\vcbuild\Release\PlatWin .\..\..\scintilla\vcbuild\Release\XPM .\..\..\scintilla\vcbuild\Release\UniConversion .\..\..\scintilla\vcbuild\Release\StyleContext .\..\..\scintilla\vcbuild\Release\KeyWords .\..\..\scintilla\vcbuild\Release\Lex*.obj .\..\..\scintilla\vcbuild\Release\CharClassify"
 				OutputFile=".\..\bin\GmodLua.dll"
 				LinkIncremental="1"
 				ModuleDefinitionFile=".\..\src\GmodLua_Plugin.def"

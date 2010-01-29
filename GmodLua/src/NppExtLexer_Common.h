@@ -2,9 +2,9 @@
 // This file is part of GmodLua.
 // Written for Notepad++
 
-// Copyright (C)2008-2009 Kyle Fleming ( garthex@gmail.com )
+// Copyright (C)2008-2010 Kyle Fleming ( garthex@gmail.com )
 
-// The following code is presented in full, written by Thell Fowler
+// The following code has been modified from the original version written by Thell Fowler
 // for the Notepad++ External Lexers Plugin.
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,6 +91,8 @@
 										 *  Required for Window Accessor
 										 *
 										 */
+
+#include "PropSetSimple.h"
 
 
 #include "WindowAccessor.h"				/*

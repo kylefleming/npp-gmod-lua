@@ -2,7 +2,7 @@
 // This file is part of GmodLua.
 // Written for Notepad++
 
-// Copyright (C)2008-2009 Kyle Fleming ( garthex@gmail.com )
+// Copyright (C)2008-2010 Kyle Fleming ( garthex@gmail.com )
 
 // Code borrowed from the Notepad++ External Lexers Plugin.
 // Copyright 2008 - 2009 Thell Fowler (thell@almostautomated.com)
@@ -442,7 +442,7 @@ void LexOrFold(bool foldOrLex, unsigned int startPos, int length, int initStyle,
 {
 
 	// Create and initialize the WindowAccessor (including contained PropSet)
-	PropSet ps;
+	PropSetSimple ps;
 	ps.SetMultiple(props);
 	WindowAccessor wa(window, ps);
 

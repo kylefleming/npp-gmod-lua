@@ -2,8 +2,13 @@
 #labels Featured,Phase-Deploy
 
 = How to Install =
+=== Using the Plugin Manager ===
+ * In Notepad++ go to Plugins > Plugin Manager > Show Plugin Manager
+ * Check the Gmod Lua Syntax Highlighter checkbox
+ * Click Install
+=== Manually ===
  * Download and install the latest version of Notepad++ at http://notepad-plus.sourceforge.net/uk/site.htm
- * Unzip the GmodLua plugin.
+ * Unzip the GmodLua plugin found on the Downloads page.
  * Copy GmodLua.dll and the Config folder into your Notepad++/plugins folder.
 
 = How to Change the Style and Color of Keywords =
@@ -15,14 +20,12 @@
 = How to Fix Notepad++ to Select the Correct Language =
  * There is a bug in older versions of Notepad++ which would select the default Lua language for all .lua files with no way to select GmodLua by default without some hacking. This has been fixed in the most recent versions.
 
-
 = How to Edit Keywords Manually =
- * Open GmodLua.xml which is in Notepad++/plugins/Config
+ * Open GmodLua.xml which is located either in `"<where you installed N++>/plugins/Config"` or `"%APPDATA%/Notepad++/plugins/Config"`
  * For each "Keywords" line, you can put as many keywords as you want.
  * The name must be a number between 0 and 8.
  * The number must correspond to a "keywordClass" in a "WordsStyle" tag.
  * In the "WordStyle" you can set the names to anything you'd like, but the styleID needs to be 20 + the value of the keywordClass.
-
  * The plugin is optimized and has the following characteristics:
   * It checks group 7 after a colon (:) or a period.
   * It checks groups 0, 1, 2, 5, and 8 when it's a single word. (A word includes underscores)
@@ -32,13 +35,14 @@
 = How to Edit Keywords Automatically =
  * Move Npp_Keywords.lua from the GmodLua zip file into garrysmod/lua and once in game issue the following command.
   * `lua_openscript Npp_Keywords.lua; lua_openscript_cl Npp_Keywords.lua`
- * Copy and paste the contents of garrysmod/data/gmod_lua.txt into Notepad++/plugins/Config/GmodLua.xml, between the `<Language></Language>` tag. (Don't overwrite the comments, of course.)
- * Be aware that any global functions or variables declared by other mods will be added to the keyword list.
+ * Open GmodLua.xml which is located either in `"<where you installed N++>/plugins/Config"` or `"%APPDATA%/Notepad++/plugins/Config"`
+ * Copy and paste the contents of garrysmod/data/gmod_lua.txt into GmodLua.xml, between the `<Language></Language>` tag. (Don't overwrite the comments, of course.)
+ * Be aware that any global functions or variables declared by other mods you've installed in Gmod will be added to the keyword list.
 
 = How to Compile from Source Using Visual Studios =
- * Compile the latest version of Notepad++ with Visual Studios [http://notepad-plus.wiki.sourceforge.net/Build+Notepad+plus+plus+and+NppInsertPlugin+with+VC+studio+2005+or+2008+Express using this tutorial].
+ * Compile the latest version of Notepad++ with Visual Studios [http://sourceforge.net/apps/mediawiki/notepad-plus/index.php?title=Compiling_Notepad%2B%2B using this tutorial].
  * Download a Subversion (SVN) program. I prefer [http://tortoisesvn.net/downloads TortoiseSVN] but there are [http://subversion.tigris.org/links.html#clients other good ones available].
  * Checkout (aka download) the GmodLua module by issuing the checkout command on [http://npp-gmod-lua.googlecode.com/svn/GmodLua].
  * Move the resulting local directory into the npp.`<version>`.src directory so that the GmodLua folder is sitting alongside the PowerEditor and scintilla folders.
- * Load up the Visual Studios solution file (GmodLua/vcbuild/GmodLuaPlugin.sln) and then compile.
+ * Load up the Visual Studios solution file (GmodLua/vcbuild/GmodLuaPlugin.sln) and then compile as `Unicode Release`.
  * Look in the GmodLua source's bin folder and take the dll and the Config folder and drop it in Notepad++'s plugins folder.

@@ -3,10 +3,15 @@
 
 = Introduction =
 
-With Gmod now using Lua 5.1.2, I decided to update the Notepad++ syntax highlighter I wrote about a year ago. This time I coordinated with Don HO, the admin of Notepad++, to release an update to N++ which I wrote that supports external lexers. This allows me to release this as a plugin instead of recompiling Scintilla each time. Now you can get updates for Notepad++ and still use the same plugin in the future.
+With Gmod now using Lua 5.1.2, I decided to update the Notepad++ syntax highlighter I wrote awhile ago. This time I coordinated with Don HO, the admin of Notepad++, to release an update to N++ which I wrote that supports external lexers. This allows me to release this as a plugin instead of recompiling Scintilla each time. Now you can get updates for Notepad++ and still use the same plugin in the future.
 
 
 = Change Log =
+== Release 1.3: January 29, 2010 ==
+ * Updated dependencies to reflect recent changes to Notepad++ headers.
+ * Updated GmodLua.xml keyword list.
+ * Modified comment style slightly to match changes in Notepad++'s vanilla lua styles.
+
 == Release 1.2: February 10, 2009 ==
  * Fixed the issue created when N++ switched to Unicode from ANSI.
  * Converted the plugin to the system created by Thell Fowler. (thell@almostautomated.com)

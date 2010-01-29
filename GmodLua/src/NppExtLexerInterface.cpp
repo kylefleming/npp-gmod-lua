@@ -2,7 +2,7 @@
 // This file is part of GmodLua.
 // Written for Notepad++
 
-// Copyright (C)2008-2009 Kyle Fleming ( garthex@gmail.com )
+// Copyright (C)2008-2010 Kyle Fleming ( garthex@gmail.com )
 
 // The following code was written by Thell Fowler for the Notepad++ External Lexers Plugin
 // and modified slightly for use with GmodLua.
@@ -154,7 +154,7 @@ void __stdcall GetLexerStatusText(unsigned int Index, TCHAR *desc, int buflength
 				 *
 				 */
 
-void __stdcall Lex(unsigned int langID, unsigned int startPos, int length, int initStyle,
+void __stdcall NppLex(unsigned int langID, unsigned int startPos, int length, int initStyle,
 				   char *words[], WindowID window, char *props)
 {
 		/*
@@ -186,7 +186,7 @@ void __stdcall Lex(unsigned int langID, unsigned int startPos, int length, int i
 
 }
 
-void __stdcall Fold(int langID, unsigned int startPos, int length,	int initStyle,
+void __stdcall NppFold(int langID, unsigned int startPos, int length,	int initStyle,
 					char *words[], WindowID window, char *props)
 {
 		/*
@@ -253,10 +253,12 @@ void init(std::string Name, tstring statusText, NppExtLexerFunction pLexOrFold,
 	//  Create a tstring and copy the standard character string into it.  Should work for both
 	//  unicode and ansi.
 	std::string about = std::string("About ");
-	int len = Name.length() + about.length();
+	std::string lexer = std::string(" Lexer");
+	int len = Name.length() + about.length() + lexer.length();
 	tstring itemName = tstring(len, '\0');
 	std::copy(about.begin(), about.end(), itemName.begin());
 	std::copy(Name.begin(), Name.end(), itemName.begin() + about.length());
+	std::copy(lexer.begin(), lexer.end(), itemName.begin() + about.length() + Name.length());
 
 	setLexerFuncItem(itemName, pMenuDlg);
 

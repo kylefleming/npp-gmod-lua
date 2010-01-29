@@ -2,7 +2,7 @@
 // This file is part of GmodLua.
 // Written for Notepad++
 
-// Copyright (C)2008-2009 Kyle Fleming ( garthex@gmail.com )
+// Copyright (C)2008-2010 Kyle Fleming ( garthex@gmail.com )
 
 // The following code was written by Thell Fowler for the Notepad++ External Lexers Plugin
 // and modified slightly for use with GmodLua.

@@ -312,6 +312,8 @@ if xside then
 	end
 	
 	file.Write("gmod_lua.txt", OUT.."\n")
+	
+	print("Finished generating keywords for Notepad++.");
 else
 	local tab = {}
 	for name, tbl in pairs(output) do

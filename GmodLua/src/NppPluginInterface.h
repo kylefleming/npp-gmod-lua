@@ -2,7 +2,7 @@
 // This file is part of GmodLua.
 // Written for Notepad++
 
-// Copyright (C)2008-2009 Kyle Fleming ( garthex@gmail.com )
+// Copyright (C)2008-2010 Kyle Fleming ( garthex@gmail.com )
 
 // The following code is presented in full, written by Thell Fowler
 // for the Notepad++ External Lexers Plugin.
@@ -65,13 +65,13 @@
 #include <algorithm>            //  Utility functions for working with the vectors.
 #include <iterator>             //  Iterator for merging the vectors, and crtdgb.h for _ASSERT.
 #include <TCHAR.h>				//  Provides MS specific routines for working with Unicode/ANSI.
+#include <windows.h>			//	Master include for Windows.
 
 // <--- Notepad++ --->
 #include "PluginInterface.h"
 								/*
 								 *  Defines the interface for interacting with Notepad++
 								 *  Includes:
-								 *    # <windows.h> Master include for Windows.
 								 *    # "Scintilla.h" Main include for Scintilla definitions.
 								 *    # "Notepad_plus_msgs.h" Main include file for Notepad++
 								 *       messaging

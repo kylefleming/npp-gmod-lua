@@ -1,4 +1,6 @@
 Garry's Mod 10 Lua Syntax Highlighter Plugin
+created by Kyle Fleming (aka Garthex)
+email: garthex AT gmail.com
 
 For more information, please visit:
 
