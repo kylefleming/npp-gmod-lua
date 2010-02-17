@@ -511,10 +511,10 @@ void menuDlg()
 {
 
 	::MessageBox(pIface::hNpp(),
-		TEXT("Garry's Mod 10 Lua Syntax Highlighter 1.2\r\n")
+		TEXT("Garry's Mod 10 Lua Syntax Highlighter 1.4\r\n")
 		TEXT("http://code.google.com/p/npp-gmod-lua/\r\n\r\n")
 		TEXT("                   Author: Kyle Fleming\n                          (aka Garthex)"),
-		TEXT("<-About->"),
+		TEXT("<- About ->"),
 		MB_OK);
 
 }

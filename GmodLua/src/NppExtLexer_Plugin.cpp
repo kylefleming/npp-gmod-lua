@@ -100,7 +100,7 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD reasonForCall, LPVOID /*lpReserved*/
 	case DLL_PROCESS_ATTACH:
 
 		// <--- Base initialization of the plugin object --->
-		pIface::init(TEXT("Gmod 10 Lua Lexer"), hModule);
+		pIface::init(TEXT("Gmod Lua Lexer"), hModule);
 
 		// <--- Base menu function items setup --->
 		pIface::setPluginFuncItem(TEXT(""), NULL);	//  A separator line.
@@ -119,7 +119,7 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD reasonForCall, LPVOID /*lpReserved*/
 		 */
 
 		//  ===> Include your lexer's initialization statement here.
-		lIface::init( "Gmod 10 Lua", TEXT("Garry's Mod 10 Lua source file"),
+		lIface::init( "Gmod Lua", TEXT("Garry's Mod Lua source file"),
 			l_gmodlua::LexOrFold, l_gmodlua::menuDlg );
 
 
