@@ -11,6 +11,9 @@
  * Unzip the GmodLua plugin found on the Downloads page.
  * Copy GmodLua.dll and the Config folder into your Notepad++/plugins folder.
 
+= I updated with the Plugin Manager and Gmod Lua Lexer stoped working! =
+ * There are two versions of GmodLua.xml now. Delete `"<where you installed N++>/plugins/Config/GmodLua.xml"`
+
 = How to Change the Style and Color of Keywords =
  * In Notepad++, go to Settings > Style Configurator...
  * Under Language scroll down to "Gmod 10 Lua," usually at the bottom.
@@ -18,7 +21,7 @@
  * The "Global Styles" in the language box also allows for other types of style configurations.
 
 = How to Fix Notepad++ to Select the Correct Language =
- * There is a bug in older versions of Notepad++ which would select the default Lua language for all .lua files with no way to select GmodLua by default without some hacking. This has been fixed in the most recent versions.
+ * There is a bug in older versions of Notepad++ which would select the default Lua language for all .lua files with no way to select GmodLua by default without some hacking. This has been fixed in the most recent versions. 
 
 = How to Edit Keywords Manually =
  * Open GmodLua.xml which is located either in `"<where you installed N++>/plugins/Config"` or `"%APPDATA%/Notepad++/plugins/Config"`
