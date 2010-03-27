@@ -10,7 +10,6 @@ With Gmod now using Lua 5.1.2, I decided to update the Notepad++ syntax highligh
 == Release 1.4: February 17, 2010 ==
  * Updated keyword list
  * Changed name from Gmod 10 Lua to Gmod Lua
- * Note: This may cause problems. If problems occur, consult the How-to page
 
 == Release 1.3: January 29, 2010 ==
  * Updated dependencies to reflect recent changes to Notepad++ headers.
