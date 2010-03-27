@@ -311,8 +311,7 @@ if xside then
 		OUT = OUT .. "</Keywords>"
 	end
 	
-	file.Write("gmod_lua.txt", OUT.."\n")
-	
+	file.Write("npp_gmod_lua.txt", OUT.."\n")
 	print("Finished generating keywords for Notepad++.");
 else
 	local tab = {}
