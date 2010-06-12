@@ -446,18 +446,22 @@ void LexOrFold(bool foldOrLex, unsigned int startPos, int length, int initStyle,
 	ps.SetMultiple(props);
 	WindowAccessor wa(window, ps);
 
-	//  Create and initialize WordList(s).
-	//  If you have an extremely large word file, or lots of styling rules you may want to speed
-	//  up processing by storing the wordlists instead of reprocessing them on each call.
-	int nWL = 0;
-	for (; words[nWL]; nWL++) ;	// count # of WordList PTRs needed
-	WordList** wl = new WordList* [nWL + 1];// alloc WordList PTRs
-	int i = 0;
-	for (; i < nWL; i++) {
-		wl[i] = new WordList();	// (works or THROWS bad_alloc EXCEPTION)
-		wl[i]->Set(words[i]);
+	static WordList** wl = NULL;
+
+	if (wl == NULL) {
+		//  Create and initialize WordList(s).
+		//  If you have an extremely large word file, or lots of styling rules you may want to speed
+		//  up processing by storing the wordlists instead of reprocessing them on each call.
+		int nWL = 0;
+		for (; words[nWL]; nWL++) ;	// count # of WordList PTRs needed
+		wl = new WordList* [nWL + 1];// alloc WordList PTRs
+		int i = 0;
+		for (; i < nWL; i++) {
+			wl[i] = new WordList();	// (works or THROWS bad_alloc EXCEPTION)
+			wl[i]->Set(words[i]);
+		}
+		wl[nWL] = 0;
 	}
-	wl[i] = 0;
 
 
 	// Set the currView handle to update at least once per lexer call.
@@ -498,9 +502,9 @@ void LexOrFold(bool foldOrLex, unsigned int startPos, int length, int initStyle,
 	wa.Flush();
 
 	// Clean up the wordlists before leaving.
-	for (i = nWL - 1; i >= 0; i--)
-		delete wl[i];
-	delete [] wl;
+//	for (i = nWL - 1; i >= 0; i--)
+//		delete wl[i];
+//	delete [] wl;
 
 }
 
