@@ -1,11 +1,16 @@
 // outputs functions and keywords in Notepad++ xml format
 
+-- Do this to prevent "Infinite Loop Detected!"
+debug.sethook()
+
+require("glon")
+require("datastream")
+
 local output = {}
 
 output.libraries = {}
 output.libraryMethods = {}
 
-output.objects = {}
 output.objectMethods = {}
 
 output.globalMethods = {}
@@ -16,8 +21,6 @@ output.flags = {}
 
 output.scriptedFunctions = {}
 output.scriptedVariables = {}
-
-output.override = {}
 
 local xside
 
@@ -41,9 +44,6 @@ if xside then
 			table.insert(output[all[1]], g)
 		end
 	end
-	for _,g in pairs({"_G", "_E", "_R", "_ENT", "color_black", "color_white", "color_transparent"}) do
-		table.insert(output.globalMethods, g)
-	end
 end
 
 local function GetFunctions( tab )
@@ -63,8 +63,25 @@ local function GetFunctions( tab )
 end
 
 local Ignores = { "mathx", "stringx", "_G", "_R", "_E", "GAMEMODE", "g_SBoxObjects", "tablex", "color_black",
-				  "color_white", "utilx", "_LOADLIB", "_LOADED", "color_transparent", "filex", "func", "DOF_Ents", 
+				  "color_white", "color_transparent", "utilx", "_LOADLIB", "_LOADED", "func", "DOF_Ents", 
 				  "Morph", "_ENT" }
+
+if CLIENT then
+	local dermaControls = {}
+	
+	for _,v in pairs(derma.GetControlList()) do
+		table.insert(dermaControls, v.ClassName)
+		//table.insert(Ignores, v.ClassName)
+	end
+	
+	for _,k in pairs(dermaControls) do
+		for _,method in pairs(GetFunctions(_G[k])) do
+			if !table.HasValue(output.objectMethods, method) then
+				table.insert(output.objectMethods, method)
+			end
+		end
+	end
+end
 
 // Retrieve Everything Global
 for k, v in pairs(_G) do
@@ -107,10 +124,6 @@ for k, v in pairs(_R) do
 		if !table.HasValue( Ignores, k ) then
 			if type(v) == "table" then
 				--Msg("MetaTable: "..tostring(v).."\n")
-				if !table.HasValue(output.objects, k) then
-					table.insert(output.objects, k)
-				end
-				
 				for _,method in pairs(GetFunctions(v)) do
 					if string.sub(method, 1, 2) == "__" then
 						if !table.HasValue(output.flags, method) then
@@ -151,8 +164,8 @@ for k,v in pairs(weapons.Get("weapon_base")) do
 		end
 	end
 end
-for _,kind in pairs({"base_anim", "base_point", "base_brush", "base_vehicle"}) do
-	if SERVER or (kind != "base_point" and kind != "base_brush") then
+for _,kind in pairs({"base_anim", "base_point", "base_brush", "base_vehicle", "base_ai"}) do
+	if SERVER or (kind != "base_point" and kind != "base_brush" and kind != "base_ai") then
 		for k,v in pairs(scripted_ents.Get(kind)) do
 			if type(k) == "string" then
 				if type(v) == "function" then
@@ -180,11 +193,12 @@ for _,kind in pairs({"base_anim", "base_point", "base_brush", "base_vehicle"}) d
 		end
 	end
 end
---[[  // Code to determine TOOL functions and variables
+
+ // Code to determine TOOL functions and variables
 local tbl1 = {}
 local tbl2 = {}
-for _, t in pairs(weapons.Get('gmod_tool').Tool) do
-	for k, v in pairs(t) do
+for k,v in pairs(weapons.Get('gmod_tool')) do
+	//for k, v in pairs(t) do
 		if type(v) == 'function' then
 			if !table.HasValue(tbl1, k) then
 				table.insert(tbl1,k)
@@ -194,19 +208,19 @@ for _, t in pairs(weapons.Get('gmod_tool').Tool) do
 				table.insert(tbl2,k)
 			end
 		end
-	end
+	//end
 end
 table.sort(tbl1)
 table.sort(tbl2)
-print('\nFunctions:\n')
-table.foreach(tbl1, function(_,v) print(v) end)
-print('\nConstants:\n')
-table.foreach(tbl2, function(_,v) print(v) end)
-]]
+//print('\nFunctions:\n')
+//table.foreach(tbl1, function(_,v) print(v) end)
+//print('\nConstants:\n')
+//table.foreach(tbl2, function(_,v) print(v) end)
+
 local funct = {funct = "scriptedFunctions", const = "scriptedVariables"}
 local TOOL = {} -- built from the above code manually
-TOOL.funct = {"Deploy", "DrawHUD", "DrawToolScreen", "FreezeMovement", "Holster", "LeftClick", "Reload", "RightClick", "Think"}
-TOOL.const = {"BuildCPanel", "AddToMenu", "AllowedCVar", "Command", "Category", "ClientConVar", "ConfigName", "LastMessage", "LeftClickAutomatic", "Message", "Mode", "Model", "Name", "RequiresTraceHit", "RightClickAutomatic", "ServerConVar", "Stage"}
+TOOL.funct = {"Deploy", "DrawHUD", "DrawToolScreen", "FreezeMovement", "Holster", "LeftClick", "Reload", "RightClick", "Think", "Deploy"}
+TOOL.const = {"BuildCPanel", "AddToMenu", "AllowedCVar", "Category", "ClientConVar", "ConfigName", "FaceTimer", "LastMessage", "LeftClickAutomatic", "Message", "Mode", "Model", "Name", "Objects", "RequiresTraceHit", "RightClickAutomatic", "ServerConVar", "Stage", "Stored"}
 
 for kind, tbl in pairs(TOOL) do
 	for _,v in pairs(tbl) do
@@ -287,6 +301,26 @@ if xside then
 		if !table.HasValue(output.scriptedVariables, "self."..v) then
 			table.insert(output.scriptedVariables, "self."..v)
 		end
+	end
+	for _,v in pairs({"_G", "_E", "_R", "_ENT"}) do
+		table.insert(output.globalMethods, v)
+	end
+	for _,v in pairs({"color_black", "color_white", "color_transparent"}) do
+		table.insert(output.constants, v)
+	end
+	
+	// Add keywords found in the wiki but not grabbed by this script
+	for _,v in pairs({"DTVar", "SetWeaponHoldType", "GetHeight", "GetWidth", "Size"}) do
+		table.insert(output.objectMethods, v)
+	end
+	for _,v in pairs({"math.huge", "team.Random", "DTextEntry.SetMultiline",
+			"DButton.OnCursorEntered", "DButton.OnCursorExited", "DListView.SetColumnText",
+			"DTextEntry.SetMultiline"}) do
+		table.insert(output.libraryMethods, v)
+	end
+	for _,v in pairs({"DAlphaBar", "DColorCircle", "DColorCube", "DColoredBox",
+			"DColorMixer", "DNumPad", "DPanelSelect", "DRGBBar", "SpawnIcon"}) do
+		table.insert(output.libraries, v)
 	end
 
 	local cat = {}

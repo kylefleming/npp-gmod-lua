@@ -1,6 +1,5 @@
-; NppExtLexer_GmodLua.cpp
 ; This file is part of GmodLua.
-; Written for Notepad++
+; A plugin written for Notepad++
 
 ; Copyright (C)2008-2010 Kyle Fleming ( garthex@gmail.com )
 
@@ -21,8 +20,10 @@
 LIBRARY	"GmodLua"
 
 EXPORTS
-	Lex = NppLex
 	GetLexerCount = GetLexerCount
 	GetLexerName = GetLexerName
 	GetLexerStatusText = GetLexerStatusText
+	GetLexerFactory = GetLexerFactory
+	; Legacy
+	Lex = NppLex
 	Fold = NppFold

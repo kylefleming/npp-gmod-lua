@@ -7,6 +7,12 @@ With Gmod now using Lua 5.1.2, I decided to update the Notepad++ syntax highligh
 
 
 = Change Log =
+== Release 1.5: September 16, 2010 ==
+ * Revamped plugin for Scintilla's new external lexer interface
+ * Did some hacky stuff to keep backwards compatibility
+ * Updated keyword list
+ * Brought back ANSI version
+
 == Release 1.4: February 17, 2010 ==
  * Updated keyword list
  * Changed name from Gmod 10 Lua to Gmod Lua

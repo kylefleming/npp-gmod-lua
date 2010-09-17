@@ -13,3 +13,16 @@ http://forums.facepunchstudios.com/showthread.php?p=8625735
 
 SourceForge.net download page-
 https://sourceforge.net/project/showfiles.php?group_id=189927&package_id=265782
+
+
+
+
+
+Special Thanks for borrowed code:
+
+Thell Fowler
+Robert Roessler
+Paul Winwood
+Alexey Yutkin
+Marcos E. Wurzius
+Philippe Lhoste

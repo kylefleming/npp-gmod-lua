@@ -17,7 +17,7 @@
 	</ToolFiles>
 	<Configurations>
 		<Configuration
-			Name="Debug|Win32"
+			Name="Unicode Debug|Win32"
 			OutputDirectory=".\..\bin"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\..\src;.\..\..\PowerEditor\src\MISC\PluginsManager;.\..\..\scintilla\src;.\..\..\scintilla\include;.\..\..\PowerEditor\src\WinControls\ColourPicker"
+				AdditionalIncludeDirectories=".\..\..\GmodLua\src;.\..\..\GmodLua\legacylib;.\..\..\PowerEditor\src\MISC\PluginsManager;.\..\..\PowerEditor\src\MISC\Common;.\..\..\PowerEditor\src\WinControls;.\..\..\PowerEditor\src\WinControls\StaticDialog;.\..\..\scintilla\include;.\..\..\scintilla\lexlib"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;VCBUILD_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -61,11 +61,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=".\..\..\Scintilla\VCBuild\Debug\PropSet .\..\..\scintilla\vcbuild\Debug\WindowAccessor .\..\..\scintilla\vcbuild\Debug\PlatWin .\..\..\scintilla\vcbuild\Debug\StyleContext .\..\..\scintilla\vcbuild\Debug\XPM .\..\..\scintilla\vcbuild\Debug\UniConversion"
+				AdditionalDependencies=".\..\..\scintilla\vcbuild\Debug\WordList .\..\..\scintilla\vcbuild\Debug\Accessor .\..\..\scintilla\vcbuild\Debug\LexerBase .\..\..\scintilla\vcbuild\Debug\PropSetSimple .\..\..\scintilla\vcbuild\Debug\StyleContext"
 				OutputFile=".\..\bin\GmodLua.dll"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;C:\Users\Kyle\Documents\Visual Studio 2008\Projects\scintilla\vcbuild\Debug&quot;"
-				ModuleDefinitionFile=".\..\src\GmodLua_Plugin.def"
+				ModuleDefinitionFile="../src/GmodLua_Plugin.def"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)$(TargetName).pdb"
 				SubSystem="2"
@@ -95,7 +95,7 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Release|Win32"
+			Name="Unicode Release|Win32"
 			OutputDirectory=".\..\bin"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
@@ -121,7 +121,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="3"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories=".\..\..\scintilla\src;.\..\..\GmodLua\src;.\..\..\scintilla\include;.\..\..\PowerEditor\src\MISC\PluginsManager"
+				AdditionalIncludeDirectories=".\..\..\GmodLua\src;.\..\..\GmodLua\legacylib;.\..\..\PowerEditor\src\MISC\PluginsManager;.\..\..\PowerEditor\src\MISC\Common;.\..\..\PowerEditor\src\WinControls;.\..\..\PowerEditor\src\WinControls\StaticDialog;.\..\..\scintilla\include;.\..\..\scintilla\lexlib"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;VCBUILD_EXPORTS"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -140,15 +140,173 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=".\..\..\scintilla\vcbuild\Release\PropSet .\..\..\scintilla\vcbuild\Release\WindowAccessor .\..\..\scintilla\vcbuild\Release\PlatWin .\..\..\scintilla\vcbuild\Release\XPM .\..\..\scintilla\vcbuild\Release\UniConversion .\..\..\scintilla\vcbuild\Release\StyleContext .\..\..\scintilla\vcbuild\Release\KeyWords .\..\..\scintilla\vcbuild\Release\CharClassify"
+				AdditionalDependencies=".\..\..\scintilla\vcbuild\Release\WordList .\..\..\scintilla\vcbuild\Release\Accessor .\..\..\scintilla\vcbuild\Release\LexerBase .\..\..\scintilla\vcbuild\Release\PropSetSimple .\..\..\scintilla\vcbuild\Release\StyleContext"
 				OutputFile=".\..\bin\GmodLua.dll"
 				LinkIncremental="1"
-				ModuleDefinitionFile=".\..\src\GmodLua_Plugin.def"
+				ModuleDefinitionFile="../src/GmodLua_Plugin.def"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)$(TargetName).pdb"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				ImportLibrary=".\..\bin\GmodLua.lib"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="ANSI Release|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="2"
+			CharacterSet="2"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="3"
+				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories=".\..\..\GmodLua\src;.\..\..\GmodLua\legacylib;.\..\..\PowerEditor\src\MISC\PluginsManager;.\..\..\PowerEditor\src\MISC\Common;.\..\..\PowerEditor\src\WinControls;.\..\..\PowerEditor\src\WinControls\StaticDialog;.\..\..\scintilla\include;.\..\..\scintilla\lexlib"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;VCBUILD_EXPORTS"
+				RuntimeLibrary="0"
+				EnableFunctionLevelLinking="true"
+				UsePrecompiledHeader="0"
+				WarningLevel="2"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies=".\..\..\scintilla\vcbuild\Release\WordList .\..\..\scintilla\vcbuild\Release\Accessor .\..\..\scintilla\vcbuild\Release\LexerBase .\..\..\scintilla\vcbuild\Release\PropSetSimple .\..\..\scintilla\vcbuild\Release\StyleContext"
+				OutputFile=".\..\bin\GmodLua.dll"
+				LinkIncremental="1"
+				ModuleDefinitionFile="../src/GmodLua_Plugin.def"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)$(TargetName).pdb"
+				SubSystem="2"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				ImportLibrary=".\..\bin\GmodLua.lib"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="ANSI Debug|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="2"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories=".\..\..\GmodLua\src;.\..\..\GmodLua\legacylib;.\..\..\PowerEditor\src\MISC\PluginsManager;.\..\..\PowerEditor\src\MISC\Common;.\..\..\PowerEditor\src\WinControls;.\..\..\PowerEditor\src\WinControls\StaticDialog;.\..\..\scintilla\include;.\..\..\scintilla\lexlib"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;VCBUILD_EXPORTS"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="1"
+				UsePrecompiledHeader="0"
+				WarningLevel="4"
+				DebugInformationFormat="4"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies=".\..\..\scintilla\vcbuild\Debug\WordList .\..\..\scintilla\vcbuild\Debug\Accessor .\..\..\scintilla\vcbuild\Debug\LexerBase .\..\..\scintilla\vcbuild\Debug\PropSetSimple .\..\..\scintilla\vcbuild\Debug\StyleContext"
+				OutputFile=".\..\bin\GmodLua.dll"
+				LinkIncremental="2"
+				AdditionalLibraryDirectories="&quot;C:\Users\Kyle\Documents\Visual Studio 2008\Projects\scintilla\vcbuild\Debug&quot;"
+				ModuleDefinitionFile="../src/GmodLua_Plugin.def"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)$(TargetName).pdb"
+				SubSystem="2"
 				ImportLibrary=".\..\bin\GmodLua.lib"
 				TargetMachine="1"
 			/>
@@ -184,23 +342,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\src\GmodLua_Plugin.def"
+				RelativePath="..\src\GmodLua.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\NppExtLexer_GmodLua.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\NppExtLexer_Plugin.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\NppExtLexerInterface.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\NppPluginInterface.cpp"
+				RelativePath="..\src\Legacy.cpp"
 				>
 			</File>
 		</Filter>
@@ -210,23 +356,15 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\src\NppExtLexer_Common.h"
+				RelativePath="..\src\GmodLua.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\NppExtLexer_GmodLua.h"
+				RelativePath="..\src\GmodLua_Plugin.def"
 				>
 			</File>
 			<File
-				RelativePath="..\src\NppExtLexer_Plugin.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\NppExtLexerInterface.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\NppPluginInterface.h"
+				RelativePath="..\src\Legacy.h"
 				>
 			</File>
 			<File
@@ -241,6 +379,90 @@
 			>
 			<File
 				RelativePath="..\src\GmodLua.rc"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="legacylib"
+			>
+			<File
+				RelativePath="..\legacylib\OldAccessor.h"
+				>
+			</File>
+			<File
+				RelativePath="..\legacylib\OldFontQuality.h"
+				>
+			</File>
+			<File
+				RelativePath="..\legacylib\OldKeyWords.cxx"
+				>
+			</File>
+			<File
+				RelativePath="..\legacylib\OldKeyWords.h"
+				>
+			</File>
+			<File
+				RelativePath="..\legacylib\OldPlatform.h"
+				>
+			</File>
+			<File
+				RelativePath="..\legacylib\OldPlatformRes.h"
+				>
+			</File>
+			<File
+				RelativePath="..\legacylib\OldPlatWin.cxx"
+				>
+			</File>
+			<File
+				RelativePath="..\legacylib\OldPropSet.cxx"
+				>
+			</File>
+			<File
+				RelativePath="..\legacylib\OldPropSet.h"
+				>
+			</File>
+			<File
+				RelativePath="..\legacylib\OldPropSetSimple.h"
+				>
+			</File>
+			<File
+				RelativePath="..\legacylib\OldSciLexer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\legacylib\OldScintilla.h"
+				>
+			</File>
+			<File
+				RelativePath="..\legacylib\OldStyleContext.cxx"
+				>
+			</File>
+			<File
+				RelativePath="..\legacylib\OldStyleContext.h"
+				>
+			</File>
+			<File
+				RelativePath="..\legacylib\OldUniConversion.cxx"
+				>
+			</File>
+			<File
+				RelativePath="..\legacylib\OldUniConversion.h"
+				>
+			</File>
+			<File
+				RelativePath="..\legacylib\OldWindowAccessor.cxx"
+				>
+			</File>
+			<File
+				RelativePath="..\legacylib\OldWindowAccessor.h"
+				>
+			</File>
+			<File
+				RelativePath="..\legacylib\OldXPM.cxx"
+				>
+			</File>
+			<File
+				RelativePath="..\legacylib\OldXPM.h"
 				>
 			</File>
 		</Filter>
